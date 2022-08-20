@@ -36,7 +36,7 @@ def is_quote(tweet):
 	return True
 
 
-def extract_urls(conversation, ref_tweet):
+def extract_urls(conversation, ref_tweet, client):
 	urls = []
 
 	if ref_tweet.entities is not None:
@@ -59,7 +59,7 @@ def extract_urls(conversation, ref_tweet):
 	return urls
 
 
-def get_job_urls(tweets):
+def get_job_urls(tweets, client):
 	if tweets is None:
 		return None
 	true_urls = []
@@ -79,7 +79,7 @@ def get_job_urls(tweets):
 																		 'author_id', 'in_reply_to_user_id', 'entities']
 														   ).data
 
-				urls = extract_urls(conversation, ref_tweet)
+				urls = extract_urls(conversation, ref_tweet, client)
 				has_found_url = False
 				for url in urls:
 					# parse domain from url
@@ -128,7 +128,7 @@ def main():
 	).data
 
 	print('executing')
-	jobs = get_job_urls(tweets)
+	jobs = get_job_urls(tweets, client)
 	if jobs is None:
 		return None
 	for job in tqdm(jobs):
