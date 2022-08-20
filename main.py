@@ -60,8 +60,9 @@ def extract_urls(conversation, ref_tweet, client):
 
 
 def get_job_urls(tweets, client):
-	if tweets is None:
+	if tweets is None or len(tweets) == 0:
 		return None
+	print('There are tweets, proceding to extract urls')
 	true_urls = []
 	for tweet in tqdm(tweets):
 		if is_top_level(tweet) or is_quote(tweet):
