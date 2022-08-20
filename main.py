@@ -11,6 +11,7 @@ import tweepy
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
+import bleach
 
 SLEEP_TIME = 5
 
@@ -149,6 +150,9 @@ def main():
 
 		description = job['tweet'].text
 		# todo lots of injection opportunities here
+
+		safe_url = bleach.clean(job['url'])
+
 		post = f"""---
 layout: post
 title:  "{title_text}"
@@ -158,8 +162,12 @@ categories: jobs
 {description}
 
 
-<meta http-equiv="refresh" content="0; URL={job['url']}" />
 """
+		post = bleach.clean(post)
+		post += f"""<meta http-equiv="refresh" content="0; URL={safe_url}" />"""
+
+		post = post.replace("{", "&#123;").replace("}", "&#125;")
+
 		# strip title_text to be a valid filename
 		date_string = job['tweet'].created_at.strftime('%Y-%m-%d')
 		fn = slugify(f'{date_string}-{title_text}') + '.markdown'
