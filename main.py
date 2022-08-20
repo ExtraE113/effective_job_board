@@ -30,8 +30,8 @@ client = tweepy.Client(
 user_id = client.get_user(username='Effective_Jobs').data['id']
 
 tweets = client.get_users_tweets(
-	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=5,
-	start_time=datetime.now() - timedelta(days=7)
+	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
+	start_time=datetime.now() - timedelta(minutes=45)
 ).data
 
 
