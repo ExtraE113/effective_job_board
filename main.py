@@ -30,7 +30,7 @@ user_id = client.get_user(username='Effective_Jobs').data['id']
 
 tweets = client.get_users_tweets(
 	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
-	# start_time=datetime.now() - timedelta(minutes=45)
+	start_time=datetime.now() - timedelta(days=7)
 ).data
 
 
@@ -125,7 +125,6 @@ def slugify(value, allow_unicode=False):
 
 def main():
 	print('executing')
-	return
 	jobs = get_job_urls(tweets)
 
 	for job in tqdm(jobs):
@@ -149,18 +148,18 @@ def main():
 		# print(job['tweet'])
 
 		description = job['tweet'].text
-
+		# todo lots of injection opportunities here
 		post = f"""---
-	layout: post
-	title:  "{title_text}"
-	date:   {job['tweet'].created_at}
-	categories: jobs
-	---
-	{description}
+layout: post
+title:  "{title_text}"
+date:   {job['tweet'].created_at}
+categories: jobs
+---
+{description}
 
 
-	<meta http-equiv="refresh" content="0; URL={job['url']}" />
-	"""
+<meta http-equiv="refresh" content="0; URL={job['url']}" />
+"""
 		# strip title_text to be a valid filename
 		date_string = job['tweet'].created_at.strftime('%Y-%m-%d')
 		fn = slugify(f'{date_string}-{title_text}') + '.markdown'
