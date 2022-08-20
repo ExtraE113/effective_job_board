@@ -165,7 +165,7 @@ categories: jobs
 		fn = slugify(f'{date_string}-{title_text}') + '.markdown'
 
 		# write post to effective_jobs/_posts/{title_text}{date}.markdown
-		with open(f'/tmp/remote/effective_jobs/_posts/{fn}', 'w', encoding="utf-8") as f:
+		with open(f'./remote/effective_jobs/_posts/{fn}', 'w', encoding="utf-8") as f:
 			f.write(post)
 
 
