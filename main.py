@@ -30,8 +30,8 @@ client = tweepy.Client(
 user_id = client.get_user(username='Effective_Jobs').data['id']
 
 tweets = client.get_users_tweets(
-	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=5,
-	start_time=datetime.now() - timedelta(days=7)
+	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
+	start_time=datetime.now() - timedelta(minutes=45)
 ).data
 
 
@@ -74,6 +74,8 @@ def extract_urls(conversation, ref_tweet):
 
 
 def get_job_urls(tweets):
+	if tweets is None:
+		return None
 	true_urls = []
 	for tweet in tqdm(tweets):
 		if is_top_level(tweet) or is_quote(tweet):
@@ -127,7 +129,8 @@ def slugify(value, allow_unicode=False):
 def main():
 	print('executing')
 	jobs = get_job_urls(tweets)
-
+	if jobs is None:
+		return None
 	for job in tqdm(jobs):
 		title_text = ""
 
