@@ -20,20 +20,6 @@ load_dotenv()
 # load from env
 bearer_token = os.getenv('BEARER_TOKEN')
 
-client = tweepy.Client(
-	bearer_token,
-	# access_token=access_token, access_token_secret=access_token_secret,
-	# consumer_key=consumer_key, consumer_secret=consumer_secret,
-	wait_on_rate_limit=True,
-)
-
-user_id = client.get_user(username='Effective_Jobs').data['id']
-
-tweets = client.get_users_tweets(
-	user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
-	start_time=datetime.now() - timedelta(minutes=45)
-).data
-
 
 # filter for top level tweets
 def is_top_level(tweet):
@@ -127,6 +113,20 @@ def slugify(value, allow_unicode=False):
 
 
 def main():
+	client = tweepy.Client(
+		bearer_token,
+		# access_token=access_token, access_token_secret=access_token_secret,
+		# consumer_key=consumer_key, consumer_secret=consumer_secret,
+		wait_on_rate_limit=True,
+	)
+
+	user_id = client.get_user(username='Effective_Jobs').data['id']
+
+	tweets = client.get_users_tweets(
+		user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
+		start_time=datetime.now() - timedelta(minutes=45)
+	).data
+
 	print('executing')
 	jobs = get_job_urls(tweets)
 	if jobs is None:
