@@ -124,6 +124,7 @@ def slugify(value, allow_unicode=False):
 
 
 def main():
+	return
 	jobs = get_job_urls(tweets)
 
 	for job in tqdm(jobs):
