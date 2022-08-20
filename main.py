@@ -14,7 +14,6 @@ import os
 
 SLEEP_TIME = 5
 
-
 load_dotenv()
 
 # load from env
@@ -107,9 +106,6 @@ def get_job_urls(tweets):
 	return true_urls
 
 
-jobs = get_job_urls(tweets)
-
-
 def slugify(value, allow_unicode=False):
 	"""
     Taken from https://github.com/django/django/blob/master/django/utils/text.py
@@ -127,43 +123,50 @@ def slugify(value, allow_unicode=False):
 	return re.sub(r'[-\s]+', '-', value).strip('-_')
 
 
-for job in tqdm(jobs):
-	title_text = ""
+def main():
+	jobs = get_job_urls(tweets)
 
-	try:
-		job_html = requests.get(job['url'])
-		# use bs4 to extract the 'title' tag
-		job_html.raise_for_status()
-		job_soup = BeautifulSoup(job_html.text, 'html.parser')
-		title = job_soup.find('title')
-		if title is not None:
-			title_text = title.text
+	for job in tqdm(jobs):
+		title_text = ""
 
-		# check for "real" titles
-		if len(title_text.split()) < 2:
+		try:
+			job_html = requests.get(job['url'])
+			# use bs4 to extract the 'title' tag
+			job_html.raise_for_status()
+			job_soup = BeautifulSoup(job_html.text, 'html.parser')
+			title = job_soup.find('title')
+			if title is not None:
+				title_text = title.text
+
+			# check for "real" titles
+			if len(title_text.split()) < 2:
+				title_text = job['tweet'].text[0:100].replace('\n', ' ') + '...'
+		except Exception as e:
+			print(e)
 			title_text = job['tweet'].text[0:100].replace('\n', ' ') + '...'
-	except Exception as e:
-		print(e)
-		title_text = job['tweet'].text[0:100].replace('\n', ' ') + '...'
-	# print(job['tweet'])
+		# print(job['tweet'])
 
-	description = job['tweet'].text
+		description = job['tweet'].text
 
-	post = f"""---
-layout: post
-title:  "{title_text}"
-date:   {job['tweet'].created_at}
-categories: jobs
----
-{description}
+		post = f"""---
+	layout: post
+	title:  "{title_text}"
+	date:   {job['tweet'].created_at}
+	categories: jobs
+	---
+	{description}
 
 
-<meta http-equiv="refresh" content="0; URL={job['url']}" />
-"""
-	# strip title_text to be a valid filename
-	date_string = job['tweet'].created_at.strftime('%Y-%m-%d')
-	fn = slugify(f'{date_string}-{title_text}') + '.markdown'
+	<meta http-equiv="refresh" content="0; URL={job['url']}" />
+	"""
+		# strip title_text to be a valid filename
+		date_string = job['tweet'].created_at.strftime('%Y-%m-%d')
+		fn = slugify(f'{date_string}-{title_text}') + '.markdown'
 
-	# write post to effective_jobs/_posts/{title_text}{date}.markdown
-	with open(f'effective_jobs/_posts/{fn}', 'w', encoding="utf-8") as f:
-		f.write(post)
+		# write post to effective_jobs/_posts/{title_text}{date}.markdown
+		with open(f'effective_jobs/_posts/{fn}', 'w', encoding="utf-8") as f:
+			f.write(post)
+
+
+if __name__ == '__main__':
+	main()
