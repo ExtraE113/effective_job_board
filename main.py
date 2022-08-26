@@ -133,7 +133,7 @@ def main():
 
 	tweets = client.get_users_tweets(
 		user_id, tweet_fields=['created_at', 'referenced_tweets', 'text'], max_results=100,
-		start_time=datetime.now() - timedelta(days=45)
+		start_time=datetime.now() - timedelta(minutes=45)
 	).data
 
 	print('executing')
