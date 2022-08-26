@@ -31,7 +31,7 @@ bearer_token = os.getenv('BEARER_TOKEN')
 
 # filter for top level tweets
 def is_top_level(tweet):
-	return len(tweet.referenced_tweets) == 0
+	return tweet.referenced_tweets is None or len(tweet.referenced_tweets) == 0
 
 
 # filter for quote tweets
@@ -75,7 +75,7 @@ def get_job_urls(tweets, client):
 	for tweet in tqdm(tweets):
 		if is_top_level(tweet) or is_quote(tweet):
 			# get the first referenced tweet's text from the api, if it exists
-			if len(tweet.referenced_tweets) > 0:
+			if tweet.referenced_tweets is not None and len(tweet.referenced_tweets) > 0:
 				ref_tweet = tweet.referenced_tweets[0]
 				ref_tweet = client.get_tweet(ref_tweet.id,
 											 tweet_fields=['created_at', 'referenced_tweets', 'text',
