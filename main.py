@@ -49,7 +49,7 @@ def extract_urls(conversation, ref_tweet, client):
 
 	if ref_tweet.entities is not None:
 		for url in ref_tweet.entities.get('urls', []):
-			urls.append({'url': url, 'tweet': ref_tweet})
+			urls.append({'url': url, 'tweet': ref_tweet, 'basetweet': ref_tweet})
 
 	if conversation is not None:
 		for reply in conversation:
@@ -63,7 +63,7 @@ def extract_urls(conversation, ref_tweet, client):
 
 						if ref.author_id == reply.author_id and reply.entities is not None:
 							for url in reply.entities.get('urls', []):
-								urls.append({'url': url, 'tweet': reply})
+								urls.append({'url': url, 'tweet': reply, 'basetweet': ref_tweet})
 	return urls
 
 
@@ -154,10 +154,10 @@ def main():
 
 			# check for "real" titles
 			if len(title_text.split()) < 2:
-				title_text = job['tweet'].text[0:100].replace('\n', ' ') + '...'
+				title_text = job['basetweet'].text[0:100].replace('\n', ' ') + '...'
 		except Exception as e:
 			print(e)
-			title_text = job['tweet'].text[0:100].replace('\n', ' ') + '...'
+			title_text = job['basetweet'].text[0:100].replace('\n', ' ') + '...'
 		# print(job['tweet'])
 
 		description = job['tweet'].text
