@@ -1,11 +1,16 @@
 ---
 layout: post
 title:  "CEA's Events Team is Hiring! - EA Forum"
-date:   2022-09-21 15:47:01+00:00
+date:   2022-09-21 16:15:50+00:00
 categories: jobs
 ---
-We are hiring for the Events Team! If you love EAG or if you think it is too small/we are making lots of other mistakes, come and join us and help us figure it out! Happy to chat this weekend if you're in DC! 
-https://t.co/ucZmkif65C
+Work with me!
+
+If it's not already plainly evident to you how lit the events team is at CEA right now, you should read this post.
+
+We're seeking high-autonomy, high-output people who can help us build out our global (and very impact) events portfolio.
+
+https://t.co/9pWIkLaYxw
 
 
 <meta http-equiv="refresh" content="0; URL=https://forum.effectivealtruism.org/posts/fHqP9NmTvALTTQSv9/cea-s-events-team-is-hiring" />
